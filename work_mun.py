@@ -57,8 +57,8 @@ for date in tqdm(dates_download):
         df_urbano_mun = df_urbano[df_urbano["COD_MUN"]==cm]
         df_urbano_mun = gpd.GeoSeries(cascaded_union(df_urbano_mun["geometry"]))
 
-        tmax_array, _ = mask(temp_tmax, [mapping(df_urbano_mun.iloc[-1].geometry)], crop=True)
-        tmin_array, _ = mask(temp_tmin, [mapping(df_urbano_mun.iloc[-1].geometry)], crop=True)
+        tmax_array, _ = mask(temp_tmax, [mapping(df_urbano_mun.iloc[0])], crop=True)
+        tmin_array, _ = mask(temp_tmin, [mapping(df_urbano_mun.iloc[0])], crop=True)
 
         df_response.loc[date, int(cm)]["tmax_mean"]   = tmax_array.mean()
         df_response.loc[date, int(cm)]["tmax_median"] = np.median(tmax_array)
@@ -67,6 +67,7 @@ for date in tqdm(dates_download):
         df_response.loc[date, int(cm)]["tmin_mean"]   = tmin_array.mean()
         df_response.loc[date, int(cm)]["tmin_median"] = np.median(tmin_array)
         df_response.loc[date, int(cm)]["tmin_std"]    = np.std(tmin_array)
+
     except:
         print("Error")
 
